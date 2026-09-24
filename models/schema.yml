@@ -96,6 +96,10 @@ models:
         description: "Identifier of the customer."
         tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_customers')
+                field: CUSTOMER_ID
 
       - name: ORDER_DATE
         description: "Order date."
@@ -220,7 +224,6 @@ models:
       - name: CUSTOMER_ID
         description: "Customer identifier."
         
-
       - name: CUSTOMER_NAME
         description: "Customer name."
 
