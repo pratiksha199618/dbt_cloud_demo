@@ -1,0 +1,269 @@
+version: 2
+
+sources:
+
+  - name: raw
+    description: "Raw data loaded from source systems."
+
+    database: DBT_CLOUD
+    schema: RAW_SCHEMA
+
+    tables:
+
+      - name: ORDERS
+        description: "Raw customer order information."
+
+        columns:
+
+          - name: ORDER_ID
+            description: "Unique identifier for each order."
+            tests:
+              - not_null
+              - unique
+
+          - name: CUSTOMER_ID
+            description: "Identifier of the customer who placed the order."
+            tests:
+              - not_null
+
+          - name: ORDER_DATE
+            description: "Date on which the order was placed."
+
+          - name: PRODUCT_NAME
+            description: "Name of the product ordered."
+
+          - name: CATEGORY
+            description: "Product category."
+
+          - name: QUANTITY
+            description: "Number of units ordered."
+            tests:
+              - not_null
+
+          - name: UNIT_PRICE
+            description: "Price per unit."
+
+          - name: ORDER_STATUS
+            description: "Current status of the order."
+
+          - name: PAYMENT_METHOD
+            description: "Payment method used for the order."
+
+          - name: CITY
+            description: "City associated with the order."
+
+
+      - name: CUSTOMERS
+        description: "Raw customer master data."
+
+        columns:
+
+          - name: CUSTOMER_ID
+            description: "Unique identifier for each customer."
+            tests:
+              - not_null
+              - unique
+
+          - name: CUSTOMER_NAME
+            description: "Full name of the customer."
+            tests:
+              - not_null
+
+          - name: EMAIL
+            description: "Customer email address."
+
+          - name: CITY
+            description: "Customer city."
+
+          - name: STATE
+            description: "Customer state."
+
+
+models:
+
+  - name: stg_orders
+    description: "Cleaned and standardized order data."
+
+    columns:
+
+      - name: ORDER_ID
+        description: "Unique identifier for each order."
+        tests:
+          - not_null
+          - unique
+
+      - name: CUSTOMER_ID
+        description: "Identifier of the customer."
+        tests:
+          - not_null
+
+      - name: ORDER_DATE
+        description: "Order date."
+        tests:
+          - not_null
+
+      - name: PRODUCT_NAME
+        description: "Product name."
+        tests:
+          - not_null
+
+      - name: CATEGORY
+        description: "Product category."
+
+      - name: QUANTITY
+        description: "Quantity ordered."
+        tests:
+          - not_null
+
+      - name: UNIT_PRICE
+        description: "Unit price."
+
+      - name: ORDER_AMOUNT
+        description: "Quantity multiplied by unit price."
+
+      - name: ORDER_STATUS
+        description: "Order status."
+
+      - name: PAYMENT_METHOD
+        description: "Payment method."
+
+      - name: CITY
+        description: "Order city."
+
+
+  - name: stg_customers
+    description: "Cleaned and standardized customer information."
+
+    columns:
+
+      - name: CUSTOMER_ID
+        description: "Unique customer identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: CUSTOMER_NAME
+        description: "Customer name."
+        tests:
+          - not_null
+
+      - name: EMAIL
+        description: "Customer email."
+
+      - name: CITY
+        description: "Customer city."
+
+      - name: STATE
+        description: "Customer state."
+
+
+  - name: cdl_customer_orders
+    description: "Business-level customer and order dataset."
+
+    columns:
+
+      - name: ORDER_ID
+        description: "Unique order identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: ORDER_DATE
+        description: "Order date."
+        tests:
+          - not_null
+
+      - name: CUSTOMER_ID
+        description: "Customer identifier."
+        tests:
+          - not_null
+
+      - name: CUSTOMER_NAME
+        description: "Customer name."
+
+      - name: EMAIL
+        description: "Customer email."
+
+      - name: CITY
+        description: "Customer city."
+
+      - name: STATE
+        description: "Customer state."
+
+      - name: PRODUCT_NAME
+        description: "Product name."
+
+      - name: CATEGORY
+        description: "Product category."
+
+      - name: QUANTITY
+        description: "Quantity ordered."
+
+      - name: UNIT_PRICE
+        description: "Unit price."
+
+      - name: ORDER_AMOUNT
+        description: "Total order value."
+
+      - name: ORDER_STATUS
+        description: "Order status."
+
+      - name: PAYMENT_METHOD
+        description: "Payment method."
+
+
+  - name: rdl_customer_sales
+    description: "Customer-level sales summary."
+
+    columns:
+
+      - name: CUSTOMER_ID
+        description: "Customer identifier."
+        tests:
+          - not_null
+          - unique
+
+      - name: CUSTOMER_NAME
+        description: "Customer name."
+
+      - name: CITY
+        description: "Customer city."
+
+      - name: STATE
+        description: "Customer state."
+
+      - name: TOTAL_ORDERS
+        description: "Total number of orders."
+
+      - name: TOTAL_ITEMS
+        description: "Total number of items purchased."
+
+      - name: TOTAL_SALES
+        description: "Total sales excluding cancelled orders."
+
+      - name: AVERAGE_ORDER_VALUE
+        description: "Average order value."
+
+
+  - name: rdl_category_sales
+    description: "Category-level sales summary."
+
+    columns:
+
+      - name: CATEGORY
+        description: "Product category."
+        tests:
+          - not_null
+          - unique
+
+      - name: TOTAL_ORDERS
+        description: "Total number of orders."
+
+      - name: TOTAL_QUANTITY
+        description: "Total quantity sold."
+
+      - name: TOTAL_SALES
+        description: "Total sales."
+
+      - name: AVG_ORDER_VALUE
+        description: "Average order value."
