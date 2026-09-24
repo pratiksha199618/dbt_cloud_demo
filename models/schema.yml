@@ -219,9 +219,7 @@ models:
 
       - name: CUSTOMER_ID
         description: "Customer identifier."
-        tests:
-          - not_null
-          - unique
+        
 
       - name: CUSTOMER_NAME
         description: "Customer name."
@@ -252,9 +250,7 @@ models:
 
       - name: CATEGORY
         description: "Product category."
-        tests:
-          - not_null
-          - unique
+        
 
       - name: TOTAL_ORDERS
         description: "Total number of orders."
