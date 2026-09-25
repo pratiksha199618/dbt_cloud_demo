@@ -9,6 +9,6 @@ SELECT
 
 FROM {{ ref('stg_orders') }}
 
-{% if target.name == 'dev' %}
+{% if target.name == 'prod' %}
 WHERE ORDER_STATUS <> 'Cancelled'
 {% endif %}
